@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Activity Page</title>
+    <style>
+        body {
+            background-color: lightgray;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .activity-section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .activity-file {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid gray;
+            cursor: pointer;
+        }
+
+        .activity-file:hover {
+            background-color: lightyellow;
+        }
+
+        .activity-file .file-name {
+            font-weight: bold;
+        }
+
+        .activity-file .file-content {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .activity-file.active .file-content {
+            display: block;
+        }
+        
+        .upload-section {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid gray;
+        }
+
+        .upload-section input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        .upload-section textarea {
+            margin-bottom: 10px;
+        }
+
+        .upload-section input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .upload-section input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Activity Page</h1>
+    </div>
+
+    <div class="upload-section">
+        <h2>Upload New Content</h2>
+        <form action="{{ url_for('activity') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required><br>
+            <textarea name="text" rows="4" cols="50" placeholder="Enter some text"></textarea><br>
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+
+    <div class="activity-section">
+        <h2>Uploaded Files</h2>
+        {% for file in files %}
+        <div class="activity-file">
+            <div class="file-name">{{ file.filename }}</div>
+            <div class="file-content">{{ file.content }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Toggle visibility of file content on click
+        const fileElements = document.querySelectorAll('.activity-file');
+        fileElements.forEach((fileElement) => {
+            fileElement.addEventListener('click', () => {
+                fileElement.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File</title>
+    <style>
+        body {
+            background-image: url('/images/waterbeat.jpeg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+        .navbar .logo {
+            margin-left: 10px;
+        }
+        .navbar .user-menu {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .navbar .user-menu .user-icon {
+            margin-right: 5px;
+            color: #4CAF50;
+        }
+        .navbar .user-menu .user-name {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .navbar .user-menu .sign-out {
+            color: black;
+            text-decoration: none;
+            display: none;
+        }
+        .navbar .user-menu:hover .sign-out {
+            display: inline;
+        }
+        .navbar a {
+            color: black;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .navbar .active {
+            background-color: #4CAF50;
+        }
+        .upload-form {
+            width: 400px;
+            margin: 150px auto;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .upload-form input[type="file"],
+        .upload-form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        .upload-form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .upload-form input[type="submit"]:hover {
+            background: #45a049;
+        }
+        .file-list {
+            margin-top: 20px;
+        }
+        .file-list h2 {
+            margin-bottom: 10px;
+        }
+        .file-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .file-list ul li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .file-list ul li .file-icon {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="/images/logo.png" alt="Logo" height="40">
+        </div>
+        <div class="user-menu">
+            <span class="user-icon">&#128100;</span>
+            <span class="user-name">{{ current_user }}</span>
+            <a href="/logout" class="sign-out">Sign Out</a>
+        </div>
+        <a href="/activity">Activity</a>
+        <a href="#software" class="active">Software</a>
+        <a href="#news">News</a>
+    </div>
+
+    <div class="upload-form">
+        <h2>Upload File</h2>
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <label for="file">Select File:</label>
+            <input type="file" name="file" id="file" required><br>
+            <label for="category">Category:</label>
+            <input type="text" name="category" id="category"><br>
+            <input type="submit" value="Upload">
+        </form>
+
+        <div class="file-list">
+            <h2>Files</h2>
+            {% if files %}
+                <ul>
+                    {% for category in files %}
+                        <h3>{{ category.category }}</h3>
+                        {% for file in category.files %}
+                            <li>
+                                <span class="file-icon">&#128190;</span>
+                                <a href="{{ url_for('download', category=category.category, filename=file) }}">{{ file }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No files uploaded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('scroll', function () {
+            var navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('sticky', window.scrollY > 0);
+        });
+    </script>
+</body>
+</html>
