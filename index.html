@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Sharing Website</title>
+</head>
+<body>
+    <h1>File Sharing Website</h1>
+    {% if 'username' in session %}
+        <p>Welcome, {{ session['username'] }}! <a href="/logout">Logout</a></p>
+    {% else %}
+        <p><a href="/login">Login</a></p>
+    {% endif %}
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ url_for('static', filename='uploads/' + file) }}">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <h2>Upload a File</h2>
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
